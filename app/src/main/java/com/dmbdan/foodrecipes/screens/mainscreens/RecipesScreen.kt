@@ -30,14 +30,21 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.dmbdan.foodrecipes.R
 import com.dmbdan.foodrecipes.domain.model.Result
 import com.dmbdan.foodrecipes.helpers.ItemImage
 import com.dmbdan.foodrecipes.helpers.state.UIState
 import com.dmbdan.foodrecipes.screens.NoConnection
+import com.dmbdan.foodrecipes.screens.bottombar.BottomBarScreen
+import com.dmbdan.foodrecipes.ui.viewmodel.MainViewModel
 
 @Composable
-fun RecipeScreen(uiState: UIState, selectedItem: (Result) -> Unit) {
+fun RecipeScreen(
+    uiState: UIState,
+    navController: NavController,
+    viewModel: MainViewModel
+) {
     val recipeItems = uiState.recipes
     Box(
         Modifier
@@ -52,11 +59,11 @@ fun RecipeScreen(uiState: UIState, selectedItem: (Result) -> Unit) {
         } else if (!uiState.error.isNullOrEmpty()) {
             NoConnection()
         } else {
-            LazyColumn() {
+            LazyColumn {
                 items(
                     items = recipeItems,
                     itemContent = {
-                        RecipeCard(recipeResponseItem = it, selectedItem = selectedItem)
+                        RecipeCard(recipeResponseItem = it,navController,viewModel)
                     }
                 )
             }
@@ -68,15 +75,19 @@ fun RecipeScreen(uiState: UIState, selectedItem: (Result) -> Unit) {
 @Composable
 fun RecipeCard(
     recipeResponseItem: Result,
-    selectedItem: (Result) -> Unit
+    navController: NavController,
+    viewModel: MainViewModel
 ) {
+    val title=viewModel.removeSlash(recipeResponseItem.title)
+    val encodedUrlImg = viewModel.encodeImgUrl(recipeResponseItem.image)
+    val summary = viewModel.convertHtmlToString(recipeResponseItem.summary)
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
             .height(200.dp)
             .clickable {
-                selectedItem(recipeResponseItem)
+                navController.navigate(route = BottomBarScreen.RecipeDetail.passArg(encodedUrlImg,title,summary))
             },
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
@@ -86,7 +97,7 @@ fun RecipeCard(
                 .padding(5.dp)
         ) {
             ItemImage(
-                recipeResponseItem,
+                recipeResponseItem.image,
                 Modifier
                     .fillMaxHeight()
                     .weight(1f)
