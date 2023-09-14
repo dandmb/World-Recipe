@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
+import android.text.Html
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
@@ -14,6 +16,8 @@ import com.dmbdan.foodrecipes.helpers.NetworkResult
 import com.dmbdan.foodrecipes.helpers.state.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 
 @HiltViewModel
@@ -74,6 +78,19 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun encodeImgUrl(imgLink: String) :String{
+        return URLEncoder.encode(imgLink, StandardCharsets.UTF_8.toString())
+    }
+    fun removeSlash(title:String):String{
+        return title.replace("/","-")
+    }
+
+    fun convertHtmlToString(summary: String): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) Html.fromHtml(
+            summary,
+            Html.FROM_HTML_MODE_LEGACY
+        ).toString() else Html.fromHtml(summary).toString()
+    }
 
     private fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<Application>().getSystemService(

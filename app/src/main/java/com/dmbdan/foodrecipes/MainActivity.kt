@@ -30,11 +30,7 @@ class MainActivity : ComponentActivity() {
                             viewModel.requestApiData()
                         },
                         uiState = viewModel.uistate.value,
-                        selectedItem = {
-                            //Toast.makeText(this,it.title, Toast.LENGTH_SHORT).show()
-                            startActivity(RecipeDetailActivity.intent(this,it))
-
-                        }
+                        viewModel = viewModel
                     )
                 }
             }

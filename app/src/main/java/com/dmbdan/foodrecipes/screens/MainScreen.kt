@@ -29,10 +29,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.dmbdan.foodrecipes.domain.model.Result
 import com.dmbdan.foodrecipes.helpers.BottomNavGraph
 import com.dmbdan.foodrecipes.helpers.state.UIState
 import com.dmbdan.foodrecipes.screens.bottombar.BottomBarScreen
+import com.dmbdan.foodrecipes.ui.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -40,7 +40,7 @@ import com.dmbdan.foodrecipes.screens.bottombar.BottomBarScreen
 fun MainScreen(
     getRecipes: () -> Unit,
     uiState: UIState,
-    selectedItem: (Result) -> Unit
+    viewModel: MainViewModel
 ) {
     val navHostController = rememberNavController()
     val recipesItems = uiState
@@ -77,7 +77,7 @@ fun MainScreen(
             navHostController = navHostController,
             Modifier.padding(values),
             recipesItems,
-            selectedItem
+            viewModel
         )
     }
 }
