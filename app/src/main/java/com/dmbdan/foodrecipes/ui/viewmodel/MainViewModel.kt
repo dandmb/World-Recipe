@@ -15,6 +15,7 @@ import com.dmbdan.foodrecipes.helpers.Constants.Companion.API_KEY
 import com.dmbdan.foodrecipes.helpers.NetworkResult
 import com.dmbdan.foodrecipes.helpers.state.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -27,6 +28,17 @@ class MainViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     val uistate = mutableStateOf(UIState())
+
+    suspend fun dataFromDB() {
+        repository.getRecipesLocallyFromDb().collectLatest {
+            Log.d("In ViewModel", "$it")
+            if (it.isEmpty()){
+                uistate.value = UIState(error = "ERROR")
+            }else{
+                uistate.value = UIState(isLoading = false, recipes = it)
+            }
+        }
+    }
 
     init {
         requestApiData()
@@ -57,7 +69,7 @@ class MainViewModel @Inject constructor(
 
     private fun getRecipes(queries: Map<String, String>) {
         viewModelScope.launch {
-            repository.getRecipes(queries).collect { result ->
+            repository.getRecipesRemotly(queries).collect { result ->
                 when (result) {
                     is NetworkResult.Loading -> {
                         uistate.value = UIState(isLoading = true)
@@ -66,7 +78,7 @@ class MainViewModel @Inject constructor(
                     is NetworkResult.Success -> {
                         uistate.value =
                             UIState(isLoading = false, recipes = result.data!!.results)
-                        Log.d("My data: ", "${uistate.value.recipes.size}")
+
                     }
 
                     else -> {
@@ -78,11 +90,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun encodeImgUrl(imgLink: String) :String{
+    fun encodeImgUrl(imgLink: String): String {
         return URLEncoder.encode(imgLink, StandardCharsets.UTF_8.toString())
     }
-    fun removeSlash(title:String):String{
-        return title.replace("/","-")
+
+    fun removeSlash(title: String): String {
+        return title.replace("/", "-")
     }
 
     fun convertHtmlToString(summary: String): String {
@@ -106,3 +119,4 @@ class MainViewModel @Inject constructor(
         }
     }
 }
+

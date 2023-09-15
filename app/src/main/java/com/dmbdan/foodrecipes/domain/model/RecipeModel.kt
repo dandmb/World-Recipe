@@ -5,12 +5,6 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class RecipeModel(
-    @SerializedName("number")
-    val number: Int,
-    @SerializedName("offset")
-    val offset: Int,
     @SerializedName("results")
-    val results: List<Result>,
-    @SerializedName("totalResults")
-    val totalResults: Int
+    val results: List<Result>
 ):Serializable

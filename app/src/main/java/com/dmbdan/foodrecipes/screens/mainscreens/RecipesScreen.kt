@@ -1,6 +1,5 @@
 package com.dmbdan.foodrecipes.screens.mainscreens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -121,7 +120,7 @@ fun RecipeCard(
                 Text(
                     text = recipeResponseItem.summary,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 2,
+                    maxLines = 3,
                     style = TextStyle(
                         fontStyle = FontStyle.Italic
                     )
@@ -138,53 +137,34 @@ fun RecipeCard(
 fun LastLine(numberOfLikes: Int, healthScore: Int) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.SpaceAround,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(2f),
-            horizontalArrangement = Arrangement.Start
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if (numberOfLikes > 0) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_favorite_24),
-                        contentDescription = "Favorite",
-                        tint = Color.Green
-                    )
-                } else {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_favorite_24),
-                        contentDescription = "Favorite",
-                        tint = Color.Red
-                    )
-                }
-                Text(text = "$numberOfLikes",style = TextStyle(fontWeight = FontWeight.Bold))
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            if (numberOfLikes > 0) {
                 Icon(
-                    painter = painterResource(id = R.drawable.baseline_score_24),
-                    contentDescription = "Health Score"
+                    painter = painterResource(id = R.drawable.baseline_favorite_24),
+                    contentDescription = "Favorite",
+                    tint = Color.Green
                 )
-                Text(text = "$healthScore", style = TextStyle(fontWeight = FontWeight.Bold))
+            } else {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_favorite_24),
+                    contentDescription = "Favorite",
+                    tint = Color.Red
+                )
             }
+            Text(text = "$numberOfLikes",style = TextStyle(fontWeight = FontWeight.Bold))
         }
-        Box(
-            modifier = Modifier
-                .weight(1f)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.baseline_save_24),
-                contentDescription = "Save",
-                modifier = Modifier
-                    .background(Color.Green)
-                    .align(Alignment.Center)
+                painter = painterResource(id = R.drawable.baseline_score_24),
+                contentDescription = "Health Score"
             )
+            Text(text = "$healthScore", style = TextStyle(fontWeight = FontWeight.Bold))
         }
     }
 }

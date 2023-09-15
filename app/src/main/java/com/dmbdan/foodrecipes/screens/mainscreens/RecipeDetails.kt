@@ -1,18 +1,25 @@
 package com.dmbdan.foodrecipes.screens.mainscreens
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -37,7 +44,10 @@ fun RecipeDetail(recipeImage: String,recipeTitle:String,recipeSummary:String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll((scrollState))
-                .padding(10.dp)
+                .padding(10.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+
         ) {
 
             ItemImage(
@@ -49,13 +59,24 @@ fun RecipeDetail(recipeImage: String,recipeTitle:String,recipeSummary:String) {
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = recipeTitle.uppercase(),
+            Text(
+                text = recipeTitle.uppercase(),
                 style = TextStyle(
                     textAlign = TextAlign.Center,
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.ExtraBold
                 ),
                 modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Icon(
+                Icons.Filled.FavoriteBorder,
+                contentDescription = "Save",
+                modifier = Modifier
+                    .size(50.dp)
+                    .clickable {
+
+                    }
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = recipeSummary,
