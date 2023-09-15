@@ -1,10 +1,16 @@
 package com.dmbdan.foodrecipes.di
 
+import android.content.Context
+import androidx.room.Room
+import com.dmbdan.foodrecipes.data.datasource.local.database.RecipeDao
+import com.dmbdan.foodrecipes.data.datasource.local.database.RecipeDatabase
 import com.dmbdan.foodrecipes.data.datasource.remote.FoodRecipeApi
 import com.dmbdan.foodrecipes.helpers.Constants.Companion.BASE_URL
+import com.dmbdan.foodrecipes.helpers.Constants.Companion.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -42,21 +48,21 @@ object AppModule {
         return retrofit.create(FoodRecipeApi::class.java)
     }
 
-    /*
+
 
     @Singleton
     @Provides
-    fun providesRoomDatabase(@ApplicationContext context: Context): ProductDatabase {
+    fun providesRoomDatabase(@ApplicationContext context: Context): RecipeDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
-            ProductDatabase::class.java,
-            "products.db"
+            RecipeDatabase::class.java,
+            DATABASE_NAME
         ).build()
     }
 
     @Singleton
     @Provides
-    fun providesProductsDao(database: ProductDatabase):ProductDao=database.productDao()
-    */
+    fun providesRecipeDao(database: RecipeDatabase): RecipeDao =database.recipesDao()
+
 
 }
