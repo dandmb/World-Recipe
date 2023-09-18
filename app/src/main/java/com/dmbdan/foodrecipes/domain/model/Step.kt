@@ -2,7 +2,6 @@ package com.dmbdan.foodrecipes.domain.model
 
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 data class Step(
     @SerializedName("equipment")
@@ -15,4 +14,4 @@ data class Step(
     val number: Int,
     @SerializedName("step")
     val step: String
-):Serializable
+)

@@ -2,7 +2,6 @@ package com.dmbdan.foodrecipes.domain.model
 
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 data class ExtendedIngredient(
     @SerializedName("aisle")
@@ -29,4 +28,4 @@ data class ExtendedIngredient(
     val originalName: String,
     @SerializedName("unit")
     val unit: String
-):Serializable
+)

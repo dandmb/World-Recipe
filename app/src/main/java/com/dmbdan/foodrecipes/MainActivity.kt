@@ -36,7 +36,8 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         uiState = viewModel.uistate.value,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        favoriteUIstate=viewModel.favoriteUistate.value
                     )
                 }
             }

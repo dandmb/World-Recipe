@@ -2,7 +2,6 @@ package com.dmbdan.foodrecipes.domain.model
 
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 data class Us(
     @SerializedName("amount")
@@ -11,4 +10,4 @@ data class Us(
     val unitLong: String,
     @SerializedName("unitShort")
     val unitShort: String
-):Serializable
+)

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.dmbdan.foodrecipes.data.datasource.local.database.RecipeDao
 import com.dmbdan.foodrecipes.data.datasource.local.database.RecipeDatabase
+import com.dmbdan.foodrecipes.data.datasource.local.database.favoritedata.FavoriteDao
 import com.dmbdan.foodrecipes.data.datasource.remote.FoodRecipeApi
 import com.dmbdan.foodrecipes.helpers.Constants.Companion.BASE_URL
 import com.dmbdan.foodrecipes.helpers.Constants.Companion.DATABASE_NAME
@@ -24,16 +25,16 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideHttpClient():OkHttpClient{
+    fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .readTimeout(15,TimeUnit.SECONDS)
-            .connectTimeout(15,TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
             .build()
     }
 
     @Singleton
     @Provides
-    fun providesRetrofit(okHttpClient:OkHttpClient): Retrofit {
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit
             .Builder()
             .baseUrl(BASE_URL)
@@ -49,7 +50,6 @@ object AppModule {
     }
 
 
-
     @Singleton
     @Provides
     fun providesRoomDatabase(@ApplicationContext context: Context): RecipeDatabase {
@@ -62,7 +62,10 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesRecipeDao(database: RecipeDatabase): RecipeDao =database.recipesDao()
+    fun providesRecipeDao(database: RecipeDatabase): RecipeDao = database.recipesDao()
 
-
+    @Singleton
+    @Provides
+    fun providesFavoriteRecipeDao(database: RecipeDatabase): FavoriteDao =
+        database.favoriteRecipesDao()
 }
