@@ -2,7 +2,6 @@ package com.dmbdan.foodrecipes.domain.model
 
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 data class Equipment(
     @SerializedName("id")
@@ -12,5 +11,7 @@ data class Equipment(
     @SerializedName("localizedName")
     val localizedName: String,
     @SerializedName("name")
-    val name: String
-):Serializable
+    val name: String,
+    @SerializedName("temperature")
+    val temperature: Temperature
+)

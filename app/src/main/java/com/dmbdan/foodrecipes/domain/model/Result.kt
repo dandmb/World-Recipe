@@ -2,13 +2,14 @@ package com.dmbdan.foodrecipes.domain.model
 
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 data class Result(
     @SerializedName("aggregateLikes")
     val aggregateLikes: Int,
     @SerializedName("analyzedInstructions")
     val analyzedInstructions: List<AnalyzedInstruction>,
+    @SerializedName("author")
+    val author: String,
     @SerializedName("cheap")
     val cheap: Boolean,
     @SerializedName("cookingMinutes")
@@ -85,4 +86,4 @@ data class Result(
     val veryPopular: Boolean,
     @SerializedName("weightWatcherSmartPoints")
     val weightWatcherSmartPoints: Int
-):Serializable
+)

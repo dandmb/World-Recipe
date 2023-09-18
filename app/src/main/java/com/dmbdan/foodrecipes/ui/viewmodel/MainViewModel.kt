@@ -10,9 +10,12 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.dmbdan.foodrecipes.data.datasource.local.database.favoritedata.FavoriteEntity
+import com.dmbdan.foodrecipes.data.repository.FavoriteRecipeRepository
 import com.dmbdan.foodrecipes.data.repository.Repository
 import com.dmbdan.foodrecipes.helpers.Constants.Companion.API_KEY
 import com.dmbdan.foodrecipes.helpers.NetworkResult
+import com.dmbdan.foodrecipes.helpers.state.FavoriteUIstate
 import com.dmbdan.foodrecipes.helpers.state.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -24,36 +27,63 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: Repository,
+    private val favoriteRecipeRepository: FavoriteRecipeRepository,
     application: Application
 ) : AndroidViewModel(application) {
 
     val uistate = mutableStateOf(UIState())
+    val favoriteUistate = mutableStateOf(FavoriteUIstate())
 
     suspend fun dataFromDB() {
         repository.getRecipesLocallyFromDb().collectLatest {
             Log.d("In ViewModel", "$it")
-            if (it.isEmpty()){
+            if (it.isEmpty()) {
                 uistate.value = UIState(error = "ERROR")
-            }else{
+            } else {
                 uistate.value = UIState(isLoading = false, recipes = it)
             }
         }
     }
 
+    suspend fun favoriteData(){
+        favoriteRecipeRepository.getFavoriteRecipes().collect{
+            Log.d("Favorite data","$it")
+            favoriteUistate.value=FavoriteUIstate(favoriteRecipes = it)
+        }
+    }
+    private suspend fun saveFavoriteRecipe(favoriteEntity: FavoriteEntity){
+        favoriteRecipeRepository.insertIntoFavoriteDatabase(favoriteEntity)
+    }
+
+    suspend fun addFavoriteRecipe(image:String, title: String,summary: String){
+        val entity=FavoriteEntity(0,image,title,summary)
+        saveFavoriteRecipe(entity)
+        favoriteData()
+    }
+
     init {
         requestApiData()
+        viewModelScope.launch {
+            favoriteData()
+        }
+
+
     }
 
     fun requestApiData(
-        query: String = "rice",
-        cuisine: String = "asian"
+        query: String = "bread",
+        cuisine: String = "asian",
+        diet: String = "Ketogenic",
+        intolerances: String = "Gluten"
     ) {
-        getRecipes(applyQueries(query, cuisine))
+        getRecipes(applyQueries(query, cuisine, diet, intolerances))
     }
 
     private fun applyQueries(
         query: String,
-        cuisine: String
+        cuisine: String,
+        diet: String,
+        intolerances: String
     ): HashMap<String, String> {
         val queries: HashMap<String, String> = HashMap()
         queries["query"] = query
@@ -62,6 +92,9 @@ class MainViewModel @Inject constructor(
         queries["cuisine"] = cuisine
         queries["addRecipeInformation"] = "true"
         queries["fillIngredients"] = "true"
+        queries["diet"] = diet
+        queries["intolerances"] = intolerances
+
 
         return queries
     }

@@ -3,9 +3,9 @@ package com.dmbdan.foodrecipes.domain.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Length(
+data class Temperature(
     @SerializedName("number")
-    val number: Int,
+    val number: Double,
     @SerializedName("unit")
     val unit: String
 )
